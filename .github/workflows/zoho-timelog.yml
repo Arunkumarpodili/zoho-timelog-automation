@@ -20,6 +20,7 @@ jobs:
           python-version: "3.11"
 
       - name: Run Zoho Time Logger
+        id: zoho
         env:
           ZOHO_CLIENT_ID: ${{ secrets.ZOHO_CLIENT_ID }}
           ZOHO_CLIENT_SECRET: ${{ secrets.ZOHO_CLIENT_SECRET }}
@@ -35,3 +36,24 @@ jobs:
           ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
           ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
         run: python Scripts/zoho_log_time.py
+
+      - name: Send success email
+        if: success()        # only if previous steps succeeded
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Zoho Time Log Success - ${{ github.repository }}"
+          to: ${{ secrets.MAIL_TO }}
+          from: ${{ secrets.MAIL_FROM }}
+          secure: true
+          body: |
+            Zoho time log job completed successfully.
+
+            Repo:    ${{ github.repository }}
+            Run ID:  ${{ github.run_id }}
+            Date:    ${{ github.event_name == 'schedule' && 'Cron run' || 'Manual run' }}
+
+            Check Zoho Projects → Timesheets to confirm the entry.
