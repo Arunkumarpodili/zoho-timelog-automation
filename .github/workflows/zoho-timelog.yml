@@ -61,7 +61,4 @@ jobs:
 
             Please verify in Zoho Projects → Timesheets.
 
-          # TLS / SSL handling
-          secure: ${{ secrets.SMTP_PORT == '465' }}
-
       # -----------------
