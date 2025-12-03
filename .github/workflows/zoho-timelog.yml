@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -35,25 +35,33 @@ jobs:
           ZOHO_TIME_END: ${{ secrets.ZOHO_TIME_END }}
           ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
           ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
-        run: python Scripts/zoho_log_time.py
+        run: python scripts/zoho_log_time.py
 
+      # -----------------------
+      # SEND SUCCESS EMAIL
+      # -----------------------
       - name: Send success email
-        if: success()        # only if previous steps succeeded
+        if: success()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "Zoho Time Log Success - ${{ github.repository }}"
-          to: ${{ secrets.MAIL_TO }}
           from: ${{ secrets.MAIL_FROM }}
-          secure: true
+          to: ${{ secrets.MAIL_TO }}
+          subject: "✅ Zoho Time Log Success"
           body: |
-            Zoho time log job completed successfully.
+            Zoho time log entry created successfully.
 
-            Repo:    ${{ github.repository }}
-            Run ID:  ${{ github.run_id }}
-            Date:    ${{ github.event_name == 'schedule' && 'Cron run' || 'Manual run' }}
+            Repository: ${{ github.repository }}
+            Workflow:   Zoho Daily Time Log
+            Run ID:     ${{ github.run_id }}
+            Trigger:    ${{ github.event_name }}
 
-            Check Zoho Projects → Timesheets to confirm the entry.
+            Please verify in Zoho Projects → Timesheets.
+
+          # TLS / SSL handling
+          secure: ${{ secrets.SMTP_PORT == '465' }}
+
+      # -----------------
