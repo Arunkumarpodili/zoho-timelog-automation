@@ -3,7 +3,7 @@ name: Zoho Daily Time Log
 on:
   schedule:
     # 11:00 AM IST = 05:30 UTC
-    - cron: "30 5 * * 1-5"
+    - cron: "30 5 * * 2-6"
   workflow_dispatch:
 
 jobs:
