@@ -2,28 +2,24 @@ name: Zoho Daily Time Log
 
 on:
   schedule:
-    # Run at 19:30 IST (14:00 UTC) every weekday (Mon–Fri)
-    - cron: "0 6 * * 1-5"
-  workflow_dispatch: {}  # allow manual run
+    # 11:00 AM IST = 05:30 UTC
+    - cron: "30 5 * * 1-5"
+  workflow_dispatch:
 
 jobs:
-  log-time:
+  zoho-time:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies (none needed, stdlib only)
-        run: |
-          python --version
-
-      - name: Run Zoho time log script
+      - name: Run Zoho Time Logger
         env:
           ZOHO_CLIENT_ID: ${{ secrets.ZOHO_CLIENT_ID }}
           ZOHO_CLIENT_SECRET: ${{ secrets.ZOHO_CLIENT_SECRET }}
@@ -38,5 +34,4 @@ jobs:
           ZOHO_TIME_END: ${{ secrets.ZOHO_TIME_END }}
           ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
           ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
-        run: |
-          python scripts/zoho_log_time.py
+        run: python scripts/zoho_log_time.py
