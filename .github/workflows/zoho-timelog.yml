@@ -34,4 +34,4 @@ jobs:
           ZOHO_TIME_END: ${{ secrets.ZOHO_TIME_END }}
           ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
           ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
-        run: python scripts/zoho_log_time.py
+        run: python Scripts/zoho_log_time.py
