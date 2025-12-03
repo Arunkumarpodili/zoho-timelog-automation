@@ -60,5 +60,6 @@ jobs:
             Trigger:    ${{ github.event_name }}
 
             Please verify in Zoho Projects → Timesheets.
+          secure: false
 
       # -----------------
