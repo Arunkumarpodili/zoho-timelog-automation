@@ -65,9 +65,11 @@ def log_time(token):
 
     payload = urllib.parse.urlencode({
         "date": get_yesterday_date(),
-        "hours": calculate_hours(),
+        "start_time": os.getenv("ZOHO_TIME_START", "09:30"),
+        "end_time": os.getenv("ZOHO_TIME_END", "18:30"),
         "bill_status": os.getenv("ZOHO_BILL_STATUS", "Billable"),
-        "notes": os.getenv("ZOHO_NOTES_PREFIX", "POC project implimentation on PLGJ for CORTEX AI"),
+        "notes": os.getenv("ZOHO_NOTES_PREFIX", "Github Auto Log"),
+
     }).encode("utf-8")
 
     req = urllib.request.Request(url, data=payload, method="POST")
