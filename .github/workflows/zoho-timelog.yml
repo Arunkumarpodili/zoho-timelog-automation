@@ -1,0 +1,42 @@
+name: Zoho Daily Time Log
+
+on:
+  schedule:
+    # Run at 19:30 IST (14:00 UTC) every weekday (Mon–Fri)
+    - cron: "0 6 * * 1-5"
+  workflow_dispatch: {}  # allow manual run
+
+jobs:
+  log-time:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (none needed, stdlib only)
+        run: |
+          python --version
+
+      - name: Run Zoho time log script
+        env:
+          ZOHO_CLIENT_ID: ${{ secrets.ZOHO_CLIENT_ID }}
+          ZOHO_CLIENT_SECRET: ${{ secrets.ZOHO_CLIENT_SECRET }}
+          ZOHO_REFRESH_TOKEN: ${{ secrets.ZOHO_REFRESH_TOKEN }}
+          ZOHO_DC: ${{ secrets.ZOHO_DC }}
+          ZOHO_PORTAL_ID: ${{ secrets.ZOHO_PORTAL_ID }}
+          ZOHO_PROJECT_ID: ${{ secrets.ZOHO_PROJECT_ID }}
+          ZOHO_TASK_ID: ${{ secrets.ZOHO_TASK_ID }}
+          ZOHO_USER_ID: ${{ secrets.ZOHO_USER_ID }}
+          ZOHO_BILL_STATUS: ${{ secrets.ZOHO_BILL_STATUS }}
+          ZOHO_TIME_START: ${{ secrets.ZOHO_TIME_START }}
+          ZOHO_TIME_END: ${{ secrets.ZOHO_TIME_END }}
+          ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
+          ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
+        run: |
+          python scripts/zoho_log_time.py
