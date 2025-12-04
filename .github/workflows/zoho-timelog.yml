@@ -36,24 +36,3 @@ jobs:
           ZOHO_TIMEZONE: ${{ secrets.ZOHO_TIMEZONE }}
           ZOHO_NOTES_PREFIX: ${{ secrets.ZOHO_NOTES_PREFIX }}
         run: python Scripts/zoho_log_time.py
-
-      # --------------------------------
-      # SEND SUCCESS EMAIL ONLY
-      # --------------------------------
-      - name: Send success email
-        if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: 587
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          from: ${{ secrets.MAIL_FROM }}
-          to: ${{ secrets.MAIL_TO }}
-          subject: "✅ Zoho Time Log Success"
-          body: |
-            Zoho timelog has been created successfully.
-
-            Repo:     ${{ github.repository }}
-            Run ID:   ${{ github.run_id }}
-            Trigger:  ${{ github.event_name }}
